@@ -109,3 +109,12 @@ Testy tych operacji sprawdzają odpowiedzi serwera, a nie trwałość zmian w ba
 Projekt umożliwił praktyczne poznanie testowania REST API w Postmanie.
 
 Podczas pracy przećwiczono wykonywanie zapytań HTTP, analizowanie odpowiedzi JSON, pisanie podstawowych skryptów testowych, wykorzystanie zmiennych kolekcji oraz automatyczne uruchamianie zestawu testów.
+
+### Wykonane testy
+
+Poniższy zrzut ekranu przedstawia wyniki uruchomienia
+całej kolekcji w Postman Runner.
+
+![Wyniki testów Postman Runner](screenshots/postman-runner-summary.png)
+
+[Zobacz szczegółowe wyniki pozostałych testów](screenshots/postman-runner-details.png)
