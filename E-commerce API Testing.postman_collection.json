@@ -1,0 +1,278 @@
+{
+  "info": {
+    "_postman_id": "a2f6ecf3-3b56-49ac-9f18-294ed2c8768e",
+    "name": "E-commerce API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60248151",
+    "_collection_link": "https://go.postman.co/collection/60248151-a2f6ecf3-3b56-49ac-9f18-294ed2c8768e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "All Products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Odpowiedz zawiera liste produktow\", function () {\r\n    pm.expect(data.products).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Lista produktow nie jest pusta\", function () {\r\n    pm.expect(data.products.length).to.be.above(0);\r\n});\r\n\r\npm.test(\"Produkt ma nazwe i cene\", function () {\r\n    pm.expect(data.products[0].title).to.be.a(\"string\");\r\n    pm.expect(data.products[0].price).to.be.a(\"number\");\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Single Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"ID produktu to 1\", function () {\r\n    pm.expect(data.id).to.eql(1);\r\n});\r\n\r\npm.test(\"Cena jest liczba\", function () {\r\n    pm.expect(data.price).to.be.a(\"number\");\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Product Not Found",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Komunikat o braku produktu\", function () {\r\n    pm.expect(data.message).to.eql(\"Product with id '9999' not found\");\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/9999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "9999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search Products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Wyniki wyszukiwania sa tablica\", function () {\r\n    pm.expect(data.products).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Znaleziono produkty\", function () {\r\n    pm.expect(data.products.length).to.be.above(0);\r\n});\r\n\r\npm.test(\"Opis produktu zawiera phone\", function () {\r\n    pm.expect(data.products[0].description.toLowerCase()).to.include(\"phone\");\r\n});\r\n\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?q=phone",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "phone"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search No Results",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Czy liczba produktów wynosi 0\", function () {\r\n    pm.expect(data.products.length).to.eql(0);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?q=xyz123nieistnieje",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "xyz123nieistnieje"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Nazwa produktu jest poprawna\", function () {\r\n    pm.expect(data.title).to.eql(\"Laptop Lenovo\");\r\n});\r\n\r\npm.test(\"Cena produktu jest poprawna\", function () {\r\n    pm.expect(data.price).to.eql(2500);\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Laptop Lenovo\",\r\n  \"price\": 2500\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/add",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Cena produktu zostala zmieniona\", function () {\r\n    pm.expect(data.price).to.eql(19.99);\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"price\": 19.99\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status HTTP to 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nlet data = pm.response.json();\r\n\r\npm.test(\"Produkt zostal usuniety\", function () {\r\n    pm.expect(data.isDeleted).to.eql(true);\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dummyjson.com"
+    }
+  ]
+}
